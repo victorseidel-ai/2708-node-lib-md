@@ -2,16 +2,12 @@ import fs from 'fs';
 import chalk from 'chalk';
 import { error } from 'console';
 
-const textoTeste = 'São geralmente recuperados a partir de um objeto [FileList](https://www.youtube.com/) que é retornado como resultado da seleção, pelo usuário, de arquivos através do elemento [<input>](https://classroom.google.com/u/0/c/ODQyNDkxNjEwMDIx/a/Nzk3ODU0MTk1NTg5/details), a partir do objeto [DataTransfer](https://miniature-guide-wrj4gpp6wpvv2gggw.github.dev/) utilizado em operações de arrastar e soltar, ou a partir da API `mozGetAsFile()` em um [HTMLCanvasElement](https://www.bing.com/alink/link?url=https%3A%2F%2Fnike.com.br&source=msn-ntp&h=e2BnvkDcYide1zuiHD51Kh0LFWj4gJifFF0XjsG9gkc%3D&aff=a&p=mkt%3Apt-br%3Bf%3AHHQEsLfFcI0bfkDE4F5cSxOwDTUAr8sDSse1rHdulh4%3D%3Btssls%3Awpol&ocid=msedgntp&pc=U531&cvid=6a18dad7d68a4c8ba9fc6f4cec4a1c1c&ei=10). Em Gecko, códigos com privilégiios podem criar objetos File representando qualquer arquivo local sem a intereção do usuário (veja [Implementation notes](https://www.office.com/) para mais informações.).'
-
 function extralinks(texto) {
   const regex =  /\[([^[\]]*?)\]\((https?:\/\/[^\s?#.].[^\s]*)\)/gm;
-  const capturas = regex.exec(texto);
-  console.log(capturas);
-
+  const capturas = [...texto.matchAll(regex)];
+  const resultados = capturas.map(capturas => ({[capturas[1]]: capturas[2]}))
+return resultados;
 }
-
-extralinks(textoTeste);
 
 function trataErro(erro) {
   console.log(erro);
@@ -25,7 +21,7 @@ async function pegaArquivo(caminhoDoArquivo) {
 
     const encoding = 'utf-8';
     const texto = await fs.promises.readFile(caminhoDoArquivo, encoding)
-    console.log(chalk.green(texto));
+    console.log(extralinks(texto));
   }
   catch (erro) {
     trataErro(erro)
@@ -51,5 +47,5 @@ async function pegaArquivo(caminhoDoArquivo) {
 //})
 //
 
-//pegaArquivo('./arquivos/texto.md');
+pegaArquivo('./arquivos/texto.md');
 //console.log(chalk.red('Faça os tiros'), chalk.yellow('valerem a pena.'));
