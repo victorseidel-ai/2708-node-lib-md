@@ -6,7 +6,7 @@ function extralinks(texto) {
   const regex =  /\[([^[\]]*?)\]\((https?:\/\/[^\s?#.].[^\s]*)\)/gm;
   const capturas = [...texto.matchAll(regex)];
   const resultados = capturas.map(capturas => ({[capturas[1]]: capturas[2]}))
-return resultados;
+return resultados.length !== 0 ? resultados : 'não há links no arquivo';
 }
 
 function trataErro(erro) {
@@ -21,7 +21,7 @@ async function pegaArquivo(caminhoDoArquivo) {
 
     const encoding = 'utf-8';
     const texto = await fs.promises.readFile(caminhoDoArquivo, encoding)
-    console.log(extralinks(texto));
+   return extralinks(texto);
   }
   catch (erro) {
     trataErro(erro)
@@ -47,5 +47,6 @@ async function pegaArquivo(caminhoDoArquivo) {
 //})
 //
 
-pegaArquivo('./arquivos/texto.md');
+export default pegaArquivo;
+
 //console.log(chalk.red('Faça os tiros'), chalk.yellow('valerem a pena.'));
